@@ -41,7 +41,15 @@ module SimpleCaptcha
 
           send_data(generate_simple_captcha_image(code), :type => 'image/jpeg', :disposition => 'inline', :filename =>  'simple_captcha.jpg')
         else
+          
+          if Rails.env == 'production'
+            options = {}
+            options[:field_value] = set_simple_captcha_data(code, options)
+            send_data(generate_simple_captcha_image(code), :type => 'image/jpeg', :disposition => 'inline', :filename =>  'simple_captcha.jpg') and return
+          end
+
           [status, headers, body]
+
         end
       end
 
